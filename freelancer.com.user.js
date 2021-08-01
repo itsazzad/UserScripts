@@ -26,7 +26,6 @@
         if (!Project) {
             Project = await getProject();
         }
-        console.log(Project)
         showBidStats(Project.result.projects[0].bid_stats.bid_count);
     });
 
@@ -45,7 +44,9 @@
     });
 
     function showBidStats(count) {
-        $("app-project-view-tabs .TabList fl-tab-item:contains('Proposals') a").append(bidStatsBadge(count));
+        if (!$("#user-script-bid-stats-badge").length) {
+            $("app-project-view-tabs .TabList fl-tab-item:contains('Proposals') a").append(bidStatsBadge(count));
+        }
     }
 
     function updateEmployerInfo(employer) {
@@ -111,7 +112,7 @@
     }
 
     function bidStatsBadge(count) {
-        return `<fl-bit class="IconContainer user-script-bid-stats-badge">
+        return `<fl-bit class="IconContainer" id="user-script-bid-stats-badge">
         <fl-text class="UnreadCount">
             <span class="NativeElement">${count}</span>
         </fl-text>
@@ -129,7 +130,7 @@
             display: inline;
         }
         
-        .user-script-bid-stats-badge .UnreadCount{
+        #user-script-bid-stats-badge .UnreadCount{
             align-items: center;
             background: #eb3730;
             border-radius: 50%;
