@@ -36,9 +36,8 @@
         if (!OwnerID)
             OwnerID = Project.result.projects[0].owner_id;
 
-        if (!Owner) {
+        if (!Owner)
             Owner = await getOwner(OwnerID);
-        }
 
         updateEmployerInfo(Owner.result.users[OwnerID]);
     });
@@ -50,11 +49,13 @@
     }
 
     function updateEmployerInfo(employer) {
-        const appEmployerInfoList$ = $('app-employer-info .CardBody fl-list-item:eq(0) fl-list');
-        employer.username && appEmployerInfoList$.append(employerInfoListItem("Username", employer.username));
-        employer.display_name && appEmployerInfoList$.append(employerInfoListItem("Display Name", employer.display_name));
-        employer.public_name && appEmployerInfoList$.append(employerInfoListItem("Public Name", employer.public_name));
-        employer.company && appEmployerInfoList$.append(employerInfoListItem("Company", employer.company));
+        if (!$('.user-script-employer-info-list-item').length) {
+            const appEmployerInfoList$ = $('app-employer-info .CardBody fl-list-item:eq(0) fl-list');
+            employer.username && appEmployerInfoList$.append(employerInfoListItem("Username", employer.username));
+            employer.display_name && appEmployerInfoList$.append(employerInfoListItem("Display Name", employer.display_name));
+            employer.public_name && appEmployerInfoList$.append(employerInfoListItem("Public Name", employer.public_name));
+            employer.company && appEmployerInfoList$.append(employerInfoListItem("Company", employer.company));
+        }
     }
 
     async function doAjax(url) {
