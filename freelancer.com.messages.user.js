@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         freelancer.com
+// @name         freelancer.com messages
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  freelancer.com
