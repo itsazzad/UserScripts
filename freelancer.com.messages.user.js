@@ -16,19 +16,19 @@
     addCSS();
 
     $(document).on('click', 'app-messaging-thread-list fl-user-avatar', function () {
-      const messageList = document.getElementsByClassName('MessageList');
-      const messageItems = messageList[0].getElementsByTagName('app-messaging-message-item');
+        const messageList = document.getElementsByClassName('MessageList');
+        const messageItems = messageList[0].getElementsByTagName('app-messaging-message-item');
 
-      for (let messageItem of messageItems) {
-          const messageHeaderText = messageItem.querySelector('[class^="Message-headerText"]');
-          if(messageHeaderText){
-              console.log(2, messageHeaderText.textContent)
-          }
-          const message = messageItem.getElementsByClassName('Message');
-          if(message.length){
-              console.log(4, message[0].textContent)
-          }
-      }
+        for (let messageItem of messageItems) {
+            const messageHeaderText = messageItem.querySelector('[class^="Message-headerText"]');
+            if (messageHeaderText) {
+                console.log(0, messageHeaderText.textContent)
+            }
+            const message = messageItem.getElementsByClassName('Message');
+            if (message.length) {
+                console.log(1, message[0].textContent)
+            }
+        }
     });
 
     function addCSS() {
