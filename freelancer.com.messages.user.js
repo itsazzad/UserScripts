@@ -11,6 +11,9 @@
 // ==/UserScript==
 
 const ProjectsByDateTime = {};
+
+const Months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 (function ($) {
     'use strict';
 
@@ -18,6 +21,10 @@ const ProjectsByDateTime = {};
 
     $(document).on('click', 'app-messaging-thread-list fl-user-avatar', function () {
         console.log(0, ProjectsByDateTime)
+        const d = new Date();
+        const day = d.getDate();
+        const month = Months[d.getMonth()];
+        const year = d.getFullYear();
         const messageList = document.getElementsByClassName('MessageList');
         const messageItems = messageList[0].getElementsByTagName('app-messaging-message-item');
         let date = "";
@@ -26,6 +33,9 @@ const ProjectsByDateTime = {};
             const messageHeaderText = messageItem.querySelector('[class^="Message-headerText"]');
             if (messageHeaderText) {//Date
                 date = messageHeaderText.textContent.trim();
+                if (date == "Today") {
+                    date = `${month} ${day}, ${year}`;
+                }
                 if (!ProjectsByDateTime[date]) {
                     ProjectsByDateTime[date] = {};
                 }
