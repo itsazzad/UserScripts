@@ -130,7 +130,7 @@
             font-style: normal;
             display: inline;
         }
-        
+
         #user-script-bid-stats-badge .UnreadCount{
             align-items: center;
             background: #eb3730;
