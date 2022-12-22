@@ -137,8 +137,6 @@
             border-radius: 50%;
             display: flex;
             justify-content: center;
-            height: 23px;
-            width: 23px;
         }
     </style>`;
 
