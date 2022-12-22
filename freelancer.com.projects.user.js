@@ -115,7 +115,7 @@
     function bidStatsBadge(count, avg) {
         return `<fl-bit class="IconContainer" id="user-script-bid-stats-badge">
         <fl-text class="UnreadCount">
-            <span class="NativeElement">${count}/${avg}</span>
+            <span class="NativeElement">${count}/${Math.ceil(avg)}</span>
         </fl-text>
     </fl-bit>`;
     }
