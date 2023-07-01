@@ -22,14 +22,14 @@
 
     addCSS();
 
-    $(document).on('click', "app-project-view-details .CardHeader:contains('Project Details')", async function () {
+    $(document).on('click', "app-project-title", async function () {
         if (!Project) {
             Project = await getProject();
         }
         showBidStats(Project.result.projects[0].bid_stats.bid_count, Project.result.projects[0].bid_stats.bid_avg);
     });
 
-    $(document).on('click', 'app-employer-info .CardHeader', async function () {
+    $(document).on('click', 'app-employer-info', async function () {
         if (!Project)
             Project = await getProject();
 
