@@ -21,36 +21,95 @@
     let Owner;
 
     addCSS();
+    initEnhancements();
 
     $(document).on('click', "app-project-title", async function () {
-        if (!Project) {
-            Project = await getProject();
-        }
-        showBidStats(Project.result.projects[0].bid_stats.bid_count, Project.result.projects[0].bid_stats.bid_avg);
+        await renderBidStats();
     });
 
     $(document).on('click', 'app-employer-info', async function () {
-        if (!Project)
+        await renderEmployerInfo();
+    });
+
+    function initEnhancements(retries = 12) {
+        renderBidStats();
+        renderEmployerInfo();
+
+        if (retries > 0 && (!$('#user-script-bid-stats-badge').length || !$('.user-script-employer-info-list-item').length)) {
+            setTimeout(function () {
+                initEnhancements(retries - 1);
+            }, 800);
+        }
+    }
+
+    async function renderBidStats() {
+        if (!Project) {
             Project = await getProject();
+        }
 
-        if (!OwnerID)
-            OwnerID = Project.result.projects[0].owner_id;
+        const project = Project && Project.result && Project.result.projects && Project.result.projects[0];
+        const bidStats = project && project.bid_stats;
 
-        if (!Owner)
+        if (!bidStats) {
+            return;
+        }
+
+        showBidStats(bidStats.bid_count, bidStats.bid_avg);
+    }
+
+    async function renderEmployerInfo() {
+        if (!Project) {
+            Project = await getProject();
+        }
+
+        const project = Project && Project.result && Project.result.projects && Project.result.projects[0];
+        if (!project) {
+            return;
+        }
+
+        if (!OwnerID) {
+            OwnerID = project.owner_id;
+        }
+
+        if (!OwnerID) {
+            return;
+        }
+
+        if (!Owner) {
             Owner = await getOwner(OwnerID);
+        }
+
+        if (!Owner || !Owner.result || !Owner.result.users || !Owner.result.users[OwnerID]) {
+            return;
+        }
 
         updateEmployerInfo(Owner.result.users[OwnerID]);
-    });
+    }
 
     function showBidStats(count, avg) {
         if (!$("#user-script-bid-stats-badge").length) {
-            $("app-project-view-tabs .TabList fl-tab-item:contains('Proposals') a").append(bidStatsBadge(count, avg));
+            const proposalTabButtons$ = $("app-project-view-tabs .TabList fl-tab-item:contains('Proposals') button.TabItem");
+            const targetButton$ = proposalTabButtons$.filter(':visible').first().length
+                ? proposalTabButtons$.filter(':visible').first()
+                : proposalTabButtons$.first();
+
+            if (targetButton$.length) {
+                targetButton$.append(bidStatsBadge(count, avg));
+            }
         }
     }
 
     function updateEmployerInfo(employer) {
         if (!$('.user-script-employer-info-list-item').length) {
-            const appEmployerInfoList$ = $('app-employer-info .CardBody fl-list-item:eq(0) fl-list');
+            let appEmployerInfoList$ = $('app-employer-info .CardBody h3:contains("About the Client")').first().closest('.CardBody').find('> fl-list').first();
+            if (!appEmployerInfoList$.length) {
+                appEmployerInfoList$ = $('app-employer-info .CardBody fl-list-item:eq(0) fl-list').first();
+            }
+
+            if (!appEmployerInfoList$.length) {
+                return;
+            }
+
             employer.username && appEmployerInfoList$.append(employerInfoListItem("Username", employer.username));
             employer.display_name && appEmployerInfoList$.append(employerInfoListItem("Display Name", employer.display_name));
             employer.public_name && appEmployerInfoList$.append(employerInfoListItem("Public Name", employer.public_name));
